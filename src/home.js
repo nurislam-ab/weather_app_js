@@ -12,38 +12,25 @@ const Home = (() => {
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-  const renderHeader = (data) => {
-    const header = document.getElementById('header');
-    const city = UIComponents.getWrapper('h2', 'city');
+  // const render = (data) => {
+  //   const content = document.getElementById('content');
+  //   const weatherBlock = UIComponents.getWrapper('div');
+  //   const cityWraper = UIComponents.getWrapper('p', 'temp-details');
+  //   const windSpeedWrapper = UIComponents.getWrapper('p', 'temp-details');
 
-    const cityTitle = document.createElement('input');
-    cityTitle.id = 'city';
+  //   cityWraper.innerHTML = `${data.name}`;
+  //   console.log(`name after url ${data.name}`);
 
-    city.innerHTML = `${data.city.name}, ${data.city.country} `;
+  //   windSpeedWrapper.innerHTML = `${data.cod}`;
+  //   console.log(`winSpeed ${data.cod}`);
 
-    header.append(city);
-    header.append(cityTitle);
-  };
+  //   weatherBlock.append(cityWraper);
+  //   weatherBlock.append(windSpeedWrapper);
+  //   content.append(weatherBlock);
+  //   return weatherBlock;
+  // };
 
-  const render = (data) => {
-    const content = document.getElementById('content');
-    const weatherBlock = UIComponents.getWrapper('div');
-    const cityWraper = UIComponents.getWrapper('p', 'temp-details');
-    const windSpeedWrapper = UIComponents.getWrapper('p', 'temp-details');
-
-    cityWraper.innerHTML = `${data.name}`;
-    console.log(`name after url ${data.name}`);
-
-    windSpeedWrapper.innerHTML = `${data.cod}`;
-    console.log(`winSpeed ${data.cod}`);
-
-    weatherBlock.append(cityWraper);
-    weatherBlock.append(windSpeedWrapper);
-    content.append(weatherBlock);
-    return weatherBlock;
-  };
-
-  const renderHourlyWeatherCard = (hourlyRecords) => {
+  const renderHourlyWeatherCard = (hourlyRecords, cityTitle) => {
     const dayWeatherCard = UIComponents.getWrapper('div', 'day-weather-card');
 
     // const hoursRange = document.createElement('input');
@@ -67,7 +54,7 @@ const Home = (() => {
       const month = months[date.getMonth()];
       const day = days[date.getDay()];
 
-      h2.innerHTML = `${dateNumber} ${month} ${day}`;
+      h2.innerHTML = `${dateNumber} ${month} ${day} ${cityTitle}`;
 
       dayWeatherCard.setAttribute('day', `${dateNumber}`);
 
@@ -117,6 +104,10 @@ const Home = (() => {
   };
 
   const renderDaysList = (data) => {
+    console.log(daysList);
+    daysList.innerHTML = '';
+    dayWeatherCardList.innerHTML = '';
+    console.log(daysList);
     for (let i = 0; i < data.list.length; i += 8) {
       const wrapper = UIComponents.getWrapper('div', 'day-preview-card');
       const dateWrapper = UIComponents.getWrapper('h2', 'h2');
@@ -132,7 +123,7 @@ const Home = (() => {
 
       const hoursArray = getHourlyWeather(date, data.list);
 
-      const hourlyWeatherCard = renderHourlyWeatherCard(hoursArray);
+      const hourlyWeatherCard = renderHourlyWeatherCard(hoursArray, data.city.name);
 
       wrapper.addEventListener('click', () => {
         const node = document.querySelector('.day-weather-card-list');
@@ -166,21 +157,85 @@ const Home = (() => {
     weatherContainer.append(dayWeatherCardList);
   };
 
+  const renderHeaderWithData = async (data) => {
+    const city = document.querySelector('.city');
+    const btn = document.querySelector('.btn');
+
+    city.innerHTML = `${data.city.name}, ${data.city.country}`;
+  };
+
+  const getWeatherUnits = () => {
+    const chbx = document.querySelector('.units');
+    let units = '';
+    if (chbx.checked) {
+      units = 'imperial';
+    } else {
+      units = 'metric';
+    }
+
+    return units;
+  };
+
   const getWeatherForecast = async () => {
-    const weatherData = await WeatherApi.getWeatherForecastData();
-    renderHeader(weatherData);
+    const input = document.querySelector('#city').value;
+    const weatherData = await WeatherApi.getWeatherForecastData(input, getWeatherUnits());
+    renderHeaderWithData(weatherData);
     renderDaysList(weatherData);
   };
 
-  const getCity = async () => {
-    const weatherData = await WeatherApi.getCurrentWeather();
-    render(weatherData);
+  const getEventTriggers = () => {
+    const input = document.querySelector('#city');
+    const chbx = document.querySelector('.units');
+    input.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        getWeatherForecast();
+      }
+    });
+
+    chbx.addEventListener('change', (event) => {
+      if (event.target.checked) {
+        getWeatherForecast();
+      }
+    });
+  };
+
+  // const getCurrentWeather = async () => {
+  //   const weatherData = await WeatherApi.getCurrentWeather();
+  //   render(weatherData);
+  // };
+
+  const renderPage = () => {
+    const header = document.getElementById('header');
+    const city = UIComponents.getWrapper('h2', 'city');
+    const switchMetrics = UIComponents.getWrapper('label', 'switch');
+    const chbx = UIComponents.getWrapper('input', 'units');
+    const slider = UIComponents.getWrapper('span', 'slider');
+    const btn = UIComponents.getWrapper('a', 'btn');
+
+    chbx.setAttribute('type', 'checkbox');
+    btn.setAttribute('href', '#');
+    btn.innerHTML = 'Get weather';
+
+    const cityTitle = document.createElement('input');
+    cityTitle.id = 'city';
+
+    switchMetrics.append(chbx);
+    switchMetrics.append(slider);
+    header.append(city);
+    header.append(cityTitle);
+    header.append(switchMetrics);
+    header.append(btn);
+
+    getWeatherForecast();
+    getEventTriggers();
   };
 
   return {
-    getCity,
+    // getCurrentWeather,
     getWeatherForecast,
     renderDaysList,
+    renderPage,
+    // getWeatherUserInput,
   };
 })();
 
