@@ -1,0 +1,120 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+  overflow: hidden;
+}
+
+#header {
+  height: 15vh;
+}
+
+#content {
+  height: 85vh;
+}
+
+.container {
+  display: flex;
+}
+
+.days-list {
+  width: 20%;
+  height: 85vh;
+  border: 1px solid grey;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+
+  .day-preview-card {
+    height: calc(85vh / 5);
+    background: beige;
+    border: 1px solid grey;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+
+    h2.h2,
+    span.day {
+      font-size: 1.5rem;
+      line-height: 2rem;
+    }
+  }
+}
+
+.day-weather-card-list {
+  width: 80%;
+  height: 85vh;
+  border: 1px solid grey;
+  background: grey;
+
+  .day-weather-card {
+    display: none;
+    border: 1px dashed darkgrey;
+
+    h2 {
+      // display: none;
+    }
+  }
+}
+
+.hour-cards-list {
+  height: 60vh;
+
+  .hourly-card {
+    display: none;
+    padding: 15px;
+    margin: 15px;
+
+    h2.temp {
+      font-size: 6rem;
+      font-weight: 500;
+    }
+
+    .pre-info {
+      display: flex;
+      align-items: center;
+
+      span {
+        padding: 0 5px;
+        font-size: 2rem;
+        margin-top: 10px;
+        margin-bottom: 50px;
+      }
+    }
+
+    .weather-info {
+      font-size: 1.5rem;
+      margin: 10px 0;
+      padding: 10px 0;
+    }
+  }
+
+  .hourly-card:first-child {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.hours-list {
+  height: 25vh;
+  display: flex;
+  align-items: center;
+
+  .hour-item {
+    padding: 15px;
+    margin: 15px;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.show {
+  display: flex !important;
+  flex-direction: column;
+}
+
+.selected {
+  background: grey !important;
+}
