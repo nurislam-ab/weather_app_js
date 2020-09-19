@@ -157,6 +157,7 @@ const Home = (() => {
             n.classList.remove('show');
           } else {
             n.classList.add('show');
+            document.querySelector(`.hour-item[number='${date}']`).click();
           }
         });
 
@@ -196,11 +197,19 @@ const Home = (() => {
     return units;
   };
 
+  const init = () => {
+    document.querySelector('.day-preview-card').classList.add('selected');
+    document.querySelector('.day-weather-card').classList.add('show');
+    document.querySelector('.hourly-card').classList.add('show');
+    document.querySelector('.hour-item').classList.add('selected');
+  };
+
   const getWeatherForecast = async () => {
     const city = document.querySelector('#city').value;
     const weatherData = await WeatherApi.getWeatherForecastData(city, getWeatherUnits());
     renderHeaderWithData(weatherData);
     renderDaysList(weatherData);
+    init();
   };
 
   const getEventTriggers = () => {
