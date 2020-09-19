@@ -274,6 +274,10 @@ input:checked + .slider::before {
     padding: 15px;
     margin: 15px;
 
+    .hourly-info {
+      z-index: 6;
+    }
+
     h2.temp {
       font-size: 6rem;
       font-weight: 500;
@@ -298,6 +302,21 @@ input:checked + .slider::before {
       display: flex;
       align-items: center;
     }
+
+    .image {
+      height: 85vh;
+      width: 100%;
+      position: absolute;
+      object-fit: cover;
+      margin-left: -80px;
+      margin-top: -29px;
+      border-top-left-radius: 30px;
+      opacity: 0.3;
+    }
+  }
+
+  .hourly-card.show {
+    flex-direction: row;
   }
 }
 
@@ -307,6 +326,7 @@ input:checked + .slider::before {
   align-items: center;
   margin-left: 65px;
   margin-top: 15px;
+  z-index: 5;
 
   .hour-item {
     padding: 30px;
