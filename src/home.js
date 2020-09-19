@@ -1,5 +1,6 @@
 import WeatherApi from './weatherApi';
 import UIComponents from './components';
+import ImageApi from './imagesApi';
 
 const Home = (() => {
   const content = document.getElementById('content');
@@ -16,6 +17,20 @@ const Home = (() => {
   const rainIcon = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve"><style type="text/css">.st0{fill:#638DA9;} .st1{fill:#FCFCFD;}</style><path class="st0" d="M351.5,430.7c6.8-25.6,18.3-49.8,30.3-73.3c12,23.6,23.5,47.7,30.3,73.3c4.7,17.8-0.8,39.5-16.5,50.2c-9.6,6.6-23.3,5-31.6-3C351.4,466.2,347.2,447,351.5,430.7z"/><path class="st0" d="M212,438.7c6.8-25.6,18.3-49.8,30.3-73.3c12,23.6,23.5,47.7,30.3,73.3c4.7,17.8-0.8,39.5-16.5,50.2c-9.6,6.6-23.3,5-31.6-3C211.9,474.2,207.7,455.1,212,438.7z"/><path class="st0" d="M63.5,430.7c6.8-25.6,18.3-49.8,30.3-73.3c12,23.6,23.5,47.7,30.3,73.3c4.7,17.8-0.8,39.5-16.5,50.2c-9.6,6.6-23.3,5-31.6-3C63.4,466.2,59.2,447,63.5,430.7z"/><path class="st1" d="M442,142.4C437.5,73.5,380.2,19,310.2,19c-59.5,0-109.8,39.3-126.3,93.4c-9.2-3.5-19.3-5.4-29.7-5.4c-42.8,0-78.2,32.1-83.3,73.5c-0.3,0-0.6,0-0.9,0c-36.9,0-66.7,29.9-66.7,66.7S33.1,314,70,314c4.4,0,8.7-0.4,12.8-1.2c20.2,27.1,52.4,44.6,88.7,44.6c31.2,0,59.4-13,79.5-33.8C266.2,338.7,287,348,310,348c31.4,0,58.8-17.4,73-43.1c11.7,5.8,24.8,9.1,38.8,9.1c48,0,87-38.9,87-87C508.7,185.9,480.3,151.5,442,142.4z"/></svg>';
   const humidityIcon = '<svg version="1.1" id="humidity" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 192 192" style="enable-background:new 0 0 192 192;" xml:space="preserve"><style type="text/css">.st0{fill:#638DA9;}.st1{fill:#FCFCFD;stroke:#FCFCFD;}</style><path class="st0" d="M96,160v-8c17.6,0,32-14.4,32-32h8C136,142.1,118.1,160,96,160z"/><path class="st1" d="M96,176c-30.9,0-56-25.1-56-56c0-49.2,51.1-96.9,53.3-98.9l2.7-2.5l2.7,2.5c2.2,2,53.3,49.8,53.3,98.9C152,150.9,126.9,176,96,176z M96,29.6c-10.5,10.6-48,51-48,90.4c0,26.5,21.5,48,48,48s48-21.5,48-48C144,80.5,106.5,40.1,96,29.6z"/></svg>';
 
+  const renderImage = async (image, hourCard) => {
+    const imageWrapper = UIComponents.getWrapper('img', 'image');
+    const imgResLength = image.results;
+    const randomizer = Math.floor((Math.random() * imgResLength.length - 1));
+    const randomImage = `${image.results[`${randomizer}`].urls.regular}`;
+    imageWrapper.setAttribute('src', `${randomImage}`);
+    hourCard.append(imageWrapper);
+  };
+
+  const getImage = async (city, desc, hourCard) => {
+    const image = await ImageApi.getImage(city, desc);
+    renderImage(image, hourCard);
+  };
+
   const renderHourlyWeatherCard = (hourlyRecords, cityTitle) => {
     const dayWeatherCard = UIComponents.getWrapper('div', 'day-weather-card');
 
@@ -25,6 +40,7 @@ const Home = (() => {
 
     hourlyRecords.forEach((hourlyRecord) => {
       const hourCard = UIComponents.getWrapper('div', 'hourly-card');
+      const hourlyInfo = UIComponents.getWrapper('div', 'hourly-info');
 
       const hourItem = UIComponents.getWrapper('div', 'hour-item');
       const hour = new Date(hourlyRecord.dt_txt).getHours();
@@ -66,6 +82,8 @@ const Home = (() => {
       humiditySpan.innerHTML = `${hourlyRecord.main.humidity}% Humidity`;
       precipitationSpan.innerHTML = `${hourlyRecord.main.pressure}`;
 
+      getImage(cityTitle, hourlyRecord.weather[0].description, hourCard);
+
       hourItem.addEventListener('click', () => {
         const node = document.querySelector(`.hour-cards-list[day='${dateNumber}']`);
         const hours = document.querySelector(`.hours-list[day='${dateNumber}']`);
@@ -98,13 +116,14 @@ const Home = (() => {
       precipitation.innerHTML = rainIcon;
       precipitation.append(precipitationSpan);
 
-      hourCard.append(temp);
+      hourlyInfo.append(temp);
       timedescWrapper.append(time);
       timedescWrapper.append(desc);
-      hourCard.append(timedescWrapper);
-      hourCard.append(wind);
-      hourCard.append(humidity);
-      hourCard.append(precipitation);
+      hourlyInfo.append(timedescWrapper);
+      hourlyInfo.append(wind);
+      hourlyInfo.append(humidity);
+      hourlyInfo.append(precipitation);
+      hourCard.append(hourlyInfo);
       hourCardsList.append(hourCard);
       hoursList.append(hourItem);
     });
