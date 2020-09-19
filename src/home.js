@@ -1,6 +1,5 @@
 import WeatherApi from './weatherApi';
 import UIComponents from './components';
-import { head } from 'lodash';
 
 const Home = (() => {
   const content = document.getElementById('content');
@@ -181,7 +180,6 @@ const Home = (() => {
 
   const renderHeaderWithData = async (data) => {
     const city = document.querySelector('.city');
-    const btn = document.querySelector('.btn');
 
     city.innerHTML = `${data.city.name}, ${data.city.country}`;
   };
@@ -199,20 +197,26 @@ const Home = (() => {
   };
 
   const getWeatherForecast = async () => {
-    const input = document.querySelector('#city').value;
-    const weatherData = await WeatherApi.getWeatherForecastData(input, getWeatherUnits());
+    // if (city !== '') {
+    const city = document.querySelector('#city').value;
+    const weatherData = await WeatherApi.getWeatherForecastData(city, getWeatherUnits());
     renderHeaderWithData(weatherData);
     renderDaysList(weatherData);
   };
 
   const getEventTriggers = () => {
     const input = document.querySelector('#city');
+    // const city = input.value;
     const chbx = document.querySelector('.units');
+    // const form = document.querySelector('.search-form');
+
     input.addEventListener('keypress', (event) => {
       if (event.key === 'Enter') {
         getWeatherForecast();
       }
     });
+
+    // form.addEventListener('submit', getWeatherForecast(city));
 
     chbx.addEventListener('change', (event) => {
       if (event.target.checked) {
@@ -227,29 +231,33 @@ const Home = (() => {
     const header = document.getElementById('header');
     const cityWrapper = UIComponents.getWrapper('div', 'city-wrapper');
     const searchWrapper = UIComponents.getWrapper('div', 'search-wrapper');
+    // const form = UIComponents.getWrapper('form', 'search-form');
     const city = UIComponents.getWrapper('h2', 'city');
     const spanC = UIComponents.getWrapper('span', 'units-type');
     const spanF = UIComponents.getWrapper('span', 'units-type');
     const switchMetrics = UIComponents.getWrapper('label', 'switch');
     const chbx = UIComponents.getWrapper('input', 'units');
     const slider = UIComponents.getWrapper('span', 'slider');
-    const btn = UIComponents.getWrapper('a', 'btn');
+    const btn = UIComponents.getWrapper('button', 'btn');
 
     spanC.innerHTML = 'C';
     spanF.innerHTML = 'F';
 
     chbx.setAttribute('type', 'checkbox');
-    btn.setAttribute('href', '#');
     btn.innerHTML = 'Get weather';
+    btn.setAttribute('type', 'submit');
+    btn.setAttribute('onclick', 'getWeatherForecast()');
 
     const cityTitle = document.createElement('input');
     cityTitle.id = 'city';
+    cityTitle.setAttribute('required', '');
 
     switchMetrics.append(chbx);
     switchMetrics.append(slider);
     cityWrapper.append(city);
     searchWrapper.append(cityTitle);
     searchWrapper.append(btn);
+    // searchWrapper.append(form);
     searchWrapper.append(spanC);
     searchWrapper.append(switchMetrics);
     searchWrapper.append(spanF);
@@ -261,9 +269,8 @@ const Home = (() => {
   };
 
   return {
-    getWeatherForecast,
-    renderDaysList,
     renderPage,
+    getWeatherForecast,
   };
 })();
 
