@@ -5,9 +5,9 @@ const WeatherApi = (() => {
 
   const getWeatherForecastData = async (city = '', units = '') => {
     if (city === '') {
-      apiUrl = `http://api.openweathermap.org/data/2.5/forecast?q=${defaultCity}&appid=${apiKey}&units=${units}`;
+      apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${defaultCity}&appid=${apiKey}&units=${units}`;
     } else {
-      apiUrl = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=${units}`;
+      apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=${units}`;
     }
 
     const weatherResponse = await fetch(`${apiUrl}`, { mode: 'cors' });
