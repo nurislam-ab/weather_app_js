@@ -302,10 +302,11 @@ input:checked + .slider::before {
 }
 
 .hours-list {
-  height: 25vh;
+  height: 24vh;
   display: flex;
   align-items: center;
   margin-left: 65px;
+  margin-top: 15px;
 
   .hour-item {
     padding: 30px;
