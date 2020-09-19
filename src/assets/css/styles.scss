@@ -273,9 +273,6 @@ input:checked + .slider::before {
     display: none;
     padding: 15px;
     margin: 15px;
-    transform: translateY(0%);
-    transition-timing-function: ease-in;
-    transition: 0.5s;
 
     h2.temp {
       font-size: 6rem;
@@ -302,11 +299,6 @@ input:checked + .slider::before {
       align-items: center;
     }
   }
-
-  // .hourly-card:first-child {
-  //   display: flex;
-  //   flex-direction: column;
-  // }
 }
 
 .hours-list {
