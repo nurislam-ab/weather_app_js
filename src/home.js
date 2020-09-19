@@ -197,7 +197,6 @@ const Home = (() => {
   };
 
   const getWeatherForecast = async () => {
-    // if (city !== '') {
     const city = document.querySelector('#city').value;
     const weatherData = await WeatherApi.getWeatherForecastData(city, getWeatherUnits());
     renderHeaderWithData(weatherData);
@@ -206,17 +205,12 @@ const Home = (() => {
 
   const getEventTriggers = () => {
     const input = document.querySelector('#city');
-    // const city = input.value;
     const chbx = document.querySelector('.units');
-    // const form = document.querySelector('.search-form');
-
     input.addEventListener('keypress', (event) => {
       if (event.key === 'Enter') {
         getWeatherForecast();
       }
     });
-
-    // form.addEventListener('submit', getWeatherForecast(city));
 
     chbx.addEventListener('change', (event) => {
       if (event.target.checked) {
@@ -231,7 +225,6 @@ const Home = (() => {
     const header = document.getElementById('header');
     const cityWrapper = UIComponents.getWrapper('div', 'city-wrapper');
     const searchWrapper = UIComponents.getWrapper('div', 'search-wrapper');
-    // const form = UIComponents.getWrapper('form', 'search-form');
     const city = UIComponents.getWrapper('h2', 'city');
     const spanC = UIComponents.getWrapper('span', 'units-type');
     const spanF = UIComponents.getWrapper('span', 'units-type');
@@ -257,7 +250,6 @@ const Home = (() => {
     cityWrapper.append(city);
     searchWrapper.append(cityTitle);
     searchWrapper.append(btn);
-    // searchWrapper.append(form);
     searchWrapper.append(spanC);
     searchWrapper.append(switchMetrics);
     searchWrapper.append(spanF);
