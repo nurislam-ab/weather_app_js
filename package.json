@@ -15,7 +15,7 @@
     "type": "git",
     "url": "git+https://github.com/nurislam-ab/weather_app_js.git"
   },
-  "keywords": [],
+  "keywords": ["js", "webpack", "weather", "weather api", "openweather api", "async", "await"],
   "author": "",
   "license": "ISC",
   "bugs": {
